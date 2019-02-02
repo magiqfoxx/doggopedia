@@ -1,26 +1,39 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from "react";
+import Doggopedia from "./components/Doggopedia";
+import Details from "./components/Details";
+import wikipedia from "./api/wikipedia";
 
 class App extends Component {
+  state = { dog: null };
+
+  onTermSubmit = async dogBreed => {
+    const response = await wikipedia.get(
+      `/api/rest_v1/page/summary/${dogBreed}`,
+      {}
+    );
+    this.setState({ dog: response.data });
+  };
+
+  quitMessage = () => {
+    this.setState({ dog: null });
+  };
+  showDetails = async dogBreed => {
+    console.log(dogBreed);
+    const response = await wikipedia.get(
+      `/api/rest_v1/page/summary/${dogBreed}`,
+      {}
+    );
+    this.setState({ dog: response.data });
+  };
   render() {
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
-      </div>
+      <React.Fragment>
+        <Doggopedia showDetails={this.showDetails} />
+        {this.state.dog ? (
+          <Details dog={this.state.dog} handleQuit={this.quitMessage} />
+        ) : null}
+        <button onClick={() => this.onTermSubmit("Husky")} />
+      </React.Fragment>
     );
   }
 }
