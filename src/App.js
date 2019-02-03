@@ -7,32 +7,58 @@ class App extends Component {
   state = { dog: null };
 
   onTermSubmit = async dogBreed => {
-    const response = await wikipedia.get(
-      `/api/rest_v1/page/summary/${dogBreed}`,
-      {}
-    );
-    this.setState({ dog: response.data });
+    try {
+      const response = await wikipedia.get(
+        `/api/rest_v1/page/summary/${dogBreed}`,
+        {}
+      );
+      this.setState({ dog: response.data });
+    } catch (error) {
+      console.log(error);
+      this.setState({ dog: "error" });
+    }
   };
 
   quitMessage = () => {
     this.setState({ dog: null });
   };
+
   showDetails = async dogBreed => {
-    console.log(dogBreed);
-    const response = await wikipedia.get(
-      `/api/rest_v1/page/summary/${dogBreed}`,
-      {}
-    );
-    this.setState({ dog: response.data });
+    let moreThanJustADog = [
+      "akita",
+      "boxer",
+      "dalmatian",
+      "labrador",
+      "newfoundland",
+      "pomeranian",
+      "samoyed",
+      "St._Bernard"
+    ];
+    if (moreThanJustADog.includes(dogBreed)) {
+      dogBreed += "_(dog)";
+    }
+    try {
+      const response = await wikipedia.get(
+        `/api/rest_v1/page/summary/${dogBreed}`,
+        {}
+      );
+      this.setState({ dog: response.data });
+    } catch (error) {
+      console.log(error);
+      this.setState({ dog: "error" });
+    }
   };
+
   render() {
     return (
       <React.Fragment>
-        <Doggopedia showDetails={this.showDetails} />
+        <Doggopedia
+          showDetails={this.showDetails}
+          onFormSubmit={this.onTermSubmit}
+        />
         {this.state.dog ? (
           <Details dog={this.state.dog} handleQuit={this.quitMessage} />
         ) : null}
-        <button onClick={() => this.onTermSubmit("Husky")} />
       </React.Fragment>
     );
   }

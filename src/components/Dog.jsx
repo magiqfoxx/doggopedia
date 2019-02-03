@@ -6,6 +6,7 @@ class Dog extends Component {
   styleDog = {
     filter: "brightness(50%)"
   };
+  dogName = this.props.dog.replace(/[_-]/g, " ");
   showDetails = () => {
     this.props.showDetails(this.props.dog);
   };
@@ -17,7 +18,7 @@ class Dog extends Component {
           onMouseEnter={() => this.setState({ mouseover: true })}
         >
           <img
-            className="main--image"
+            className="dog--image"
             src={`./img/${this.props.dog}.jpg`}
             alt={`${this.props.dog}`}
           />
@@ -31,12 +32,12 @@ class Dog extends Component {
           onClick={this.showDetails}
         >
           <img
-            className="main--image"
+            className="dog--image"
             src={`./img/${this.props.dog}.jpg`}
             alt={`${this.props.dog}`}
             style={this.styleDog}
           />
-          {<div className="main--image--name">{this.props.dog}</div>}
+          {<div className="dog--image--name">{this.dogName}</div>}
         </div>
       );
     }

@@ -14,6 +14,7 @@ class SearchBar extends Component {
           <input
             type="text"
             value={this.state.term}
+            placeholder="Search..."
             onChange={e => {
               this.setState({ term: e.target.value });
             }}
