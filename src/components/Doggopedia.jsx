@@ -1,55 +1,12 @@
 import React, { Component } from "react";
-import Dog from "./Dog";
+import Main from "./Main";
 import SearchBar from "./SearchBar";
+import Quiz from "./Quiz";
 import "./Doggopedia.css";
+import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 
 class Doggopedia extends Component {
-  state = {};
-  listOfDogs = [
-    "akita",
-    "basset_hound",
-    "beagle",
-    "bloodhound",
-    "border_collie",
-    "border_terrier",
-    "borzoi",
-    "boston_terrier",
-    "boxer",
-    "bull_terrier",
-    "bullmastiff",
-    "chow_chow",
-    "cocker_spaniel",
-    "dalmatian",
-    "daschund",
-    "doberman",
-    "fox_terrier",
-    "french_bulldog",
-    "german_pinscher",
-    "german_shepherd",
-    "german_spaniel",
-    "golden_retriever",
-    "great_dane",
-    "greyhound",
-    "husky",
-    "jack_russell_terrier",
-    "king_charles_spaniel",
-    "labrador",
-    "lakeland_terrier",
-    "newfoundland",
-    "pitbull",
-    "pomeranian",
-    "poodle",
-    "pug",
-    "rottweiler",
-    "samoyed",
-    "scottish_terrier",
-    "shiba_inu",
-    "shih_tzu",
-    "St._Bernard",
-    "tibetan_mastiff",
-    "west_highland_white_terrier",
-    "yorkshire_terrier"
-  ];
+  state = { page: "main" };
 
   showDetails = dog => {
     this.props.showDetails(dog);
@@ -57,35 +14,43 @@ class Doggopedia extends Component {
   onFormSubmit = term => {
     this.props.onFormSubmit(term);
   };
+
   render() {
     return (
-      <React.Fragment>
-        <header>
-          <div className="header--logo">
-            <img
-              className="header--logo--image"
-              src="../img/paw.png"
-              alt="paw"
-            />
-            <h1 className="header--logo--text">doggopedia</h1>
-          </div>
-          <SearchBar onFormSubmit={this.onFormSubmit} />
-          <hr />
-        </header>
+      <Router>
+        <React.Fragment>
+          <header>
+            <Link to="/">
+              <div className="header--logo">
+                <img
+                  className="header--logo--image"
+                  src="./img/paw.png"
+                  alt="paw"
+                />
+                <h1 className="header--logo--text">doggopedia</h1>
+              </div>
+            </Link>
+            <nav className="header--nav">
+              <Link to="/quiz">Quiz</Link>
+            </nav>
 
-        <section>
-          <main>
-            <p>
-              Data is fetched from wikipedia. Please allow a few seconds to
-              load.
-            </p>
-            {this.listOfDogs.map((dog, i) => {
-              return <Dog showDetails={this.showDetails} dog={dog} key={i} />;
-            })}
-          </main>
-        </section>
-        <footer>Copyright by Kat</footer>
-      </React.Fragment>
+            <SearchBar onFormSubmit={this.onFormSubmit} />
+            <hr />
+          </header>
+
+          <section>
+            <Route
+              extact
+              path="/"
+              render={() => <Main showDetails={this.showDetails} />}
+            />
+            :
+            <Route extact path="/quiz" render={() => <Quiz />} />
+          </section>
+
+          <footer>Copyright by Kat</footer>
+        </React.Fragment>
+      </Router>
     );
   }
 }

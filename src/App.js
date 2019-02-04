@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import Doggopedia from "./components/Doggopedia";
 import Details from "./components/Details";
 import wikipedia from "./api/wikipedia";
-
 class App extends Component {
   state = { dog: null };
 
