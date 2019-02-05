@@ -1,14 +1,26 @@
 import React, { Component } from "react";
 
+import { listOfDogs } from "./data";
+
 class Dog extends Component {
   state = { mouseover: false };
 
   styleDog = {
     filter: "brightness(50%)"
   };
+
+  dogName = this.props.dog.replace(/[_-]/g, " ");
+
+  findPicture = () => {
+    return Object.keys(listOfDogs).find(
+      key => listOfDogs[key] === this.props.dog
+    );
+  };
+
   showDetails = () => {
     this.props.showDetails(this.props.dog);
   };
+
   renderContent = () => {
     if (!this.state.mouseover) {
       return (
@@ -17,8 +29,8 @@ class Dog extends Component {
           onMouseEnter={() => this.setState({ mouseover: true })}
         >
           <img
-            className="main--image"
-            src={`./img/${this.props.dog}.jpg`}
+            className="dog--image"
+            src={`./img/${this.findPicture()}.jpg`}
             alt={`${this.props.dog}`}
           />
         </div>
@@ -31,16 +43,17 @@ class Dog extends Component {
           onClick={this.showDetails}
         >
           <img
-            className="main--image"
-            src={`./img/${this.props.dog}.jpg`}
+            className="dog--image"
+            src={`./img/${this.findPicture()}.jpg`}
             alt={`${this.props.dog}`}
-            style={this.styleDog}
+            style={this.styleDog} //adds styling to hovered element
           />
-          {<div className="main--image--name">{this.props.dog}</div>}
+          <div className="dog--image--name">{this.dogName}</div>
         </div>
       );
     }
   };
+
   render() {
     return this.renderContent();
   }

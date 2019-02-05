@@ -1,51 +1,45 @@
-import React, { Component } from "react";
-import Dog from "./Dog";
+import React from "react";
+import { BrowserRouter as Router, Route, Link, Switch } from "react-router-dom";
+
+import Main from "./Main";
 import SearchBar from "./SearchBar";
 import "./Doggopedia.css";
 
-class Doggopedia extends Component {
-  state = {};
-  listOfDogs = [
-    "daschund",
-    "doberman",
-    "german-shepherd",
-    "golden-retriever",
-    "husky",
-    "labrador",
-    "pitbull",
-    "pomeranian",
-    "pug",
-    "rottweiler",
-    "scottish-terrier",
-    "west-highland-white-terrier",
-    "yorkshire-terrier"
-  ];
-
-  showDetails = dog => {
-    this.props.showDetails(dog);
+const Doggopedia = props => {
+  const showDetails = dog => {
+    props.showDetails(dog);
   };
-  render() {
-    return (
-      <React.Fragment>
-        <header>
-          <div className="logo">
-            <img className="logo--image" src="../img/paw.png" alt="paw" />
-            <h1>doggopedia</h1>
-          </div>
-          <SearchBar />
-          <hr />
-        </header>
 
-        <section>
-          <main>
-            {this.listOfDogs.map((dog, i) => {
-              return <Dog showDetails={this.showDetails} dog={dog} key={i} />;
-            })}
-          </main>
-        </section>
-      </React.Fragment>
-    );
-  }
-}
+  const onFormSubmit = term => {
+    props.onFormSubmit(term);
+  };
+
+  return (
+    <React.Fragment>
+      <header>
+        <Link to="/">
+          <div className="header--logo">
+            <img
+              className="header--logo--image"
+              src="./img/paw.png"
+              alt="paw"
+            />
+            <h1 className="header--logo--text">doggopedia</h1>
+          </div>
+        </Link>
+        <nav className="header--nav">
+          <Link to="/quiz">Quiz</Link>
+        </nav>
+
+        <SearchBar onFormSubmit={onFormSubmit} />
+        <hr />
+      </header>
+      <section>
+        <Main showDetails={showDetails} />,
+      </section>
+      <footer>Copyright by Kat</footer>
+    </React.Fragment>
+  );
+};
 
 export default Doggopedia;
