@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import Doggopedia from "./components/Doggopedia";
 import Details from "./components/Details";
 import wikipedia from "./api/wikipedia";
+
 class App extends Component {
   state = { dog: null };
 
@@ -34,7 +35,7 @@ class App extends Component {
       "St._Bernard"
     ];
     if (moreThanJustADog.includes(dogBreed)) {
-      dogBreed += "_(dog)";
+      dogBreed += "_(dog)"; //handles the disambiguation
     }
     try {
       const response = await wikipedia.get(
@@ -48,18 +49,20 @@ class App extends Component {
     }
   };
 
+  Doggopedia = (
+    <Doggopedia
+      showDetails={this.showDetails}
+      onFormSubmit={this.onTermSubmit}
+    />
+  );
+
   render() {
-    return (
-      <React.Fragment>
-        <Doggopedia
-          showDetails={this.showDetails}
-          onFormSubmit={this.onTermSubmit}
-        />
-        {this.state.dog ? (
+    return !this.state.dog
+      ? this.Doggopedia
+      : [
+          this.Doggopedia,
           <Details dog={this.state.dog} handleQuit={this.quitMessage} />
-        ) : null}
-      </React.Fragment>
-    );
+        ];
   }
 }
 

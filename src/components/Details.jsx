@@ -7,13 +7,14 @@ class Details extends Component {
     let dog = this.props.dog;
     if (dog !== "error") {
       if (dog.displaytitle.includes("(dog)")) {
-        this.setState({ name: dog.displaytitle.slice(0, -5) });
+        this.setState({ name: dog.displaytitle.slice(0, -5) }); //removes "_(dog)"
       } else {
         this.setState({ name: dog.displaytitle });
       }
       this.setState({ summary: dog.extract });
       this.setState({ img: dog.originalimage.source });
     } else {
+      //error
       this.setState({ name: "Unavailable" });
       this.setState({ summary: "There seems to be a problem" });
       this.setState({ img: "" });

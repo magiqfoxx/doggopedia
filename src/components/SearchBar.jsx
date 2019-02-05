@@ -7,6 +7,7 @@ class SearchBar extends Component {
     event.preventDefault();
     this.props.onFormSubmit(this.state.term);
   };
+
   render() {
     return (
       <div className="header--search-bar">

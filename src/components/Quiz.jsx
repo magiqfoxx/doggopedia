@@ -1,68 +1,24 @@
 import React, { Component } from "react";
 import "./Quiz.css";
-
-const listOfDogs = {
-  42: "akita",
-  41: "basset_hound",
-  27: "beagle",
-  21: "bloodhound",
-  8: "border_collie",
-  20: "border_terrier",
-  40: "borzoi",
-  33: "boston_terrier",
-  39: "boxer",
-  9: "bull_terrier",
-  30: "bullmastiff",
-  32: "chow_chow",
-  13: "cocker_spaniel",
-  31: "dalmatian",
-  23: "daschund",
-  11: "doberman",
-  29: "fox_terrier",
-  5: "french_bulldog",
-  12: "german_pinscher",
-  17: "german_shepherd",
-  28: "german_spaniel",
-  26: "golden_retriever",
-  19: "great_dane",
-  4: "greyhound",
-  22: "husky",
-  18: "jack_russell_terrier",
-  6: "king_charles_spaniel",
-  10: "labrador",
-  7: "lakeland_terrier",
-  34: "newfoundland",
-  25: "pitbull",
-  15: "pomeranian",
-  35: "poodle",
-  43: "pug",
-  38: "rottweiler",
-  37: "samoyed",
-  14: "scottish_terrier",
-  36: "shiba_inu",
-  3: "shih_tzu",
-  2: "St._Bernard",
-  1: "tibetan_mastiff",
-  16: "west_highland_white_terrier",
-  24: "yorkshire_terrier"
-};
+import { listOfDogs } from "./data";
+import { BrowserRouter as Router, Route, Link, Switch } from "react-router-dom";
+import Doggopedia from "./Doggopedia";
+import App from "../App";
 
 class Quiz extends Component {
   state = { breed: 0, points: 0 };
-  //randomly choose a a picture from list. remove pic from list
-  //randomly choose 4 different breed names.
-  //if breed of pic === breed => points
+
   breeds = [];
   pictures = [];
 
   componentDidMount = () => {
-    this.breeds = Object.values(listOfDogs); //keep as non-mutated copy
+    this.breeds = Object.values(listOfDogs); //kept as non-mutated copy
     this.pictures = Object.keys(listOfDogs); //mutated during the game to avoid repeats
   };
 
   newPhoto = () => {
     let returnArr = [];
-    let breeds = this.breeds.slice(); //mutated inside method only
+    let breeds = this.breeds.slice(); //mutated inside method only. copy
 
     function getRandom(max) {
       return Math.floor(Math.random() * Math.floor(max));
@@ -75,15 +31,15 @@ class Quiz extends Component {
     let answer1 = listOfDogs[picture];
     breeds.splice(breeds.indexOf(answer1), 1); //removing the correct answer to avoid duplicates
 
-    let index2 = getRandom(breeds.length);
-    returnArr.push(breeds[index2]);
-    breeds.splice(index2, 1);
-    let index3 = getRandom(breeds.length);
-    returnArr.push(breeds[index3]);
-    breeds.splice(index3, 1);
-    let index4 = getRandom(breeds.length);
-    returnArr.push(breeds[index4]);
-    breeds.splice(index4, 1);
+    const getAnswer = () => {
+      let index = getRandom(breeds.length);
+      returnArr.push(breeds[index]);
+      breeds.splice(index, 1);
+    };
+
+    getAnswer();
+    getAnswer();
+    getAnswer();
 
     let correctI = getRandom(4); //random position for correct guess
 
@@ -106,29 +62,30 @@ class Quiz extends Component {
       breed: listOfDogs[turn[4]]
     });
   };
-  showMessage = message => {
+
+  showMessage = () => {
     let el = document.querySelector(".quiz--message");
-    el.style.content = "message";
     el.style.display = "block";
+
     setTimeout(() => {
       el.style.display = "none";
-    }, 2000);
+    }, 1000);
   };
+
   answerChosen = answer => {
     if (this.pictures.length < 1) {
-      this.showMessage("you won the game!");
+      this.showMessage(`Game's over. You got ${this.points} right!`);
     }
     if (answer === this.state.breed) {
       let points = this.state.points + 1;
       this.setState({ points });
-      this.showMessage("correct");
     } else {
-      this.showMessage("wrong");
+      this.showMessage();
     }
     this.newRound();
   };
 
-  renderContent = () => {
+  renderQuiz = () => {
     if (!this.state.breed) {
       return (
         <button className="quiz--button" onClick={this.newRound}>
@@ -138,15 +95,14 @@ class Quiz extends Component {
     } else {
       return [
         <span className="quiz--points" key="0">
-          Points {this.state.points}
+          {this.state.points} points
         </span>,
-        <section class="section__quiz">
+        <section className="section__quiz" key="1">
           <div className="quiz" key="5">
-            <div className="quiz--message" />
+            <div className="quiz--message">Wrong</div>
             <div className="quiz--image">
-              <img src={`../img/mystery/${this.state.picture}.jpg`} alt="dog" />
+              <img src={`../img/${this.state.picture}.jpg`} alt="dog" />
             </div>
-
             <div className="quiz--options">
               <ul>
                 <li onClick={() => this.answerChosen(this.state.a1)} key="1">
@@ -168,21 +124,54 @@ class Quiz extends Component {
       ];
     }
   };
-  render() {
+
+  renderContent = () => {
     return (
       <React.Fragment>
-        <div className="header--logo">
-          <img className="header--logo--image" src="./img/paw.png" alt="paw" />
-          <h1 className="header--logo--text">doggopedia</h1>
-        </div>
+        <Switch>
+          <Route
+            extact
+            path="/"
+            exact={true}
+            render={() => (
+              <Doggopedia
+                showDetails={this.showDetails}
+                onFormSubmit={this.onTermSubmit}
+              />
+            )}
+          />
+        </Switch>
+
+        <Link to="/">
+          <div className="header--logo__quiz">
+            <img
+              className="header--logo--image"
+              src="./img/paw.png"
+              alt="paw"
+            />
+            <h1 className="header--logo--text">doggopedia</h1>
+          </div>
+        </Link>
         <div className="quiz--title">
           <h1>Can you guess the breed?</h1>
         </div>
 
-        {this.renderContent()}
+        {this.renderQuiz()}
 
         <footer>Copyright by Kat</footer>
       </React.Fragment>
+    );
+  };
+  render() {
+    return (
+      <Router>
+        <React.Fragment>
+          <Switch>
+            <Route extact path="/quiz" render={() => this.renderContent()} />
+            <Route extact path="/" exact={true} render={() => <App />} />
+          </Switch>
+        </React.Fragment>
+      </Router>
     );
   }
 }
