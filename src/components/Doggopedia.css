@@ -141,6 +141,7 @@ main .dog--image--name {
   left: 50%;
   color: white;
   transform: translate(-50%, -50%);
+  cursor: pointer;
 }
 .details__background {
   height: 100vh;

@@ -1,9 +1,7 @@
 import React, { Component } from "react";
 import "./Quiz.css";
 import { listOfDogs } from "./data";
-import { BrowserRouter as Router, Route, Link, Switch } from "react-router-dom";
-import Doggopedia from "./Doggopedia";
-import App from "../App";
+import { Link } from "react-router-dom";
 
 class Quiz extends Component {
   state = { breed: 0, points: 0 };
@@ -101,7 +99,7 @@ class Quiz extends Component {
           <div className="quiz" key="5">
             <div className="quiz--message">Wrong</div>
             <div className="quiz--image">
-              <img src={`../img/${this.state.picture}.jpg`} alt="dog" />
+              <img src={`./img/${this.state.picture}.jpg`} alt="dog" />
             </div>
             <div className="quiz--options">
               <ul>
@@ -128,20 +126,6 @@ class Quiz extends Component {
   renderContent = () => {
     return (
       <React.Fragment>
-        <Switch>
-          <Route
-            extact
-            path="/"
-            exact={true}
-            render={() => (
-              <Doggopedia
-                showDetails={this.showDetails}
-                onFormSubmit={this.onTermSubmit}
-              />
-            )}
-          />
-        </Switch>
-
         <Link to="/">
           <div className="header--logo__quiz">
             <img
@@ -163,16 +147,7 @@ class Quiz extends Component {
     );
   };
   render() {
-    return (
-      <Router>
-        <React.Fragment>
-          <Switch>
-            <Route extact path="/quiz" render={() => this.renderContent()} />
-            <Route extact path="/" exact={true} render={() => <App />} />
-          </Switch>
-        </React.Fragment>
-      </Router>
-    );
+    return <React.Fragment>{this.renderContent()}</React.Fragment>;
   }
 }
 
