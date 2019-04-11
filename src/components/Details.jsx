@@ -12,7 +12,7 @@ class Details extends Component {
         this.setState({ name: dog.displaytitle });
       }
       this.setState({ summary: dog.extract });
-      this.setState({ img: dog.originalimage.source });
+      this.setState({ img: dog.originalimage.source || null });
     } else {
       //error
       this.setState({ name: "Unavailable" });

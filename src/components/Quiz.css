@@ -129,3 +129,14 @@
 .quiz--options li:hover {
   background-color: rgba(228, 234, 235, 0.7);
 }
+.quiz__won {
+  background-color: rgba(228, 234, 235, 0.7);
+  min-width: 300px;
+  max-width: 80vw;
+  margin: 0 auto;
+  min-height: 30vh;
+  padding: 2rem;
+  box-shadow: inset 0px 0px 2px 1px rgb(255, 255, 255);
+  line-height: 2rem;
+  text-align: center;
+}

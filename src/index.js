@@ -4,16 +4,9 @@ import { BrowserRouter } from "react-router-dom";
 
 import Navigation from "./Navigation";
 
-import * as serviceWorker from "./serviceWorker";
-
 ReactDOM.render(
   <BrowserRouter basename={process.env.PUBLIC_URL}>
     <Navigation />
   </BrowserRouter>,
   document.getElementById("root")
 );
-
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: http://bit.ly/CRA-PWA
-serviceWorker.unregister();
