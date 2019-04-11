@@ -1,13 +1,11 @@
 import React, { Component } from "react";
 import "./Quiz.css";
 import { listOfDogs } from "./data";
-import { BrowserRouter as Router, Route, Link, Switch } from "react-router-dom";
-import Doggopedia from "./Doggopedia";
-import App from "../App";
+import { Link } from "react-router-dom";
 
 class Quiz extends Component {
-  state = { breed: 0, points: 0 };
-
+  state = { breed: 0, points: 0, game: "off" };
+  // DISPLAY POINT TOTAL AT THE END. RIGHT NOW IT GOES BACK TO THE START SCREEN
   breeds = [];
   pictures = [];
 
@@ -17,6 +15,9 @@ class Quiz extends Component {
   };
 
   newPhoto = () => {
+    if (this.pictures.length === 0) {
+      this.setState({ game: "won" });
+    }
     let returnArr = [];
     let breeds = this.breeds.slice(); //mutated inside method only. copy
 
@@ -51,6 +52,9 @@ class Quiz extends Component {
   };
 
   newRound = () => {
+    if (this.state.game === "off") {
+      this.setState({ game: "on" });
+    }
     let turn = this.newPhoto();
 
     this.setState({
@@ -64,6 +68,7 @@ class Quiz extends Component {
   };
 
   showMessage = () => {
+    //displays WRONG
     let el = document.querySelector(".quiz--message");
     el.style.display = "block";
 
@@ -73,9 +78,6 @@ class Quiz extends Component {
   };
 
   answerChosen = answer => {
-    if (this.pictures.length < 1) {
-      this.showMessage(`Game's over. You got ${this.points} right!`);
-    }
     if (answer === this.state.breed) {
       let points = this.state.points + 1;
       this.setState({ points });
@@ -86,12 +88,23 @@ class Quiz extends Component {
   };
 
   renderQuiz = () => {
-    if (!this.state.breed) {
+    if (!this.state.breed && this.state.game === "off") {
+      //edit this to allow for total points display at the end
       return (
         <button className="quiz--button" onClick={this.newRound}>
           start
         </button>
       );
+    } else if (this.state.game === "won") {
+      {
+        return (
+          <section className="section__quiz">
+            <div className="quiz__won">{`Game's over. You got ${
+              this.state.points
+            } out of 42 right!`}</div>
+          </section>
+        );
+      }
     } else {
       return [
         <span className="quiz--points" key="0">
@@ -101,7 +114,7 @@ class Quiz extends Component {
           <div className="quiz" key="5">
             <div className="quiz--message">Wrong</div>
             <div className="quiz--image">
-              <img src={`../img/${this.state.picture}.jpg`} alt="dog" />
+              <img src={`./img/${this.state.picture}.jpg`} alt="dog" />
             </div>
             <div className="quiz--options">
               <ul>
@@ -128,20 +141,6 @@ class Quiz extends Component {
   renderContent = () => {
     return (
       <React.Fragment>
-        <Switch>
-          <Route
-            extact
-            path="/"
-            exact={true}
-            render={() => (
-              <Doggopedia
-                showDetails={this.showDetails}
-                onFormSubmit={this.onTermSubmit}
-              />
-            )}
-          />
-        </Switch>
-
         <Link to="/">
           <div className="header--logo__quiz">
             <img
@@ -163,16 +162,7 @@ class Quiz extends Component {
     );
   };
   render() {
-    return (
-      <Router>
-        <React.Fragment>
-          <Switch>
-            <Route extact path="/quiz" render={() => this.renderContent()} />
-            <Route extact path="/" exact={true} render={() => <App />} />
-          </Switch>
-        </React.Fragment>
-      </Router>
-    );
+    return <React.Fragment>{this.renderContent()}</React.Fragment>;
   }
 }
 
