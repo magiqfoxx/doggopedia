@@ -1,0 +1,12 @@
+#page-404 {
+  background-color: rgba(192, 204, 214, 0.8);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  max-width: 80vw;
+  min-height: 100vh;
+  margin: 0 auto;
+  padding: 2rem 0rem;
+  line-height: 2rem;
+}
